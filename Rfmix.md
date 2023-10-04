@@ -134,7 +134,7 @@ After running this command, you should find that two file (`ASW.phased.haps` & `
 shapeit  --input-vcf ADMIX_COHORT/ASW.unphased.vcf.gz \
       --input-map HAP_REF/chr22.genetic.map.txt \
       --input-ref HAP_REF/chr22.hap.gz HAP_REF/chr22.legend.gz HAP_REF/ALL.sample \
-      -O ADMIX_COHORT/ASW.phased 
+      -O ADMIX_COHORT/ASW.phased --thread 8
       
       
       # add this if shapeit throw error message:   --exclude-snp alignments.snp.strand.exclude
