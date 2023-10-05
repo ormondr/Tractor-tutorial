@@ -36,7 +36,7 @@ We have prepared a python script `RunTractor.py` that allows users to run Tracto
 * Python3
 * pandas
 * numpy
-* statsmodel
+* statsmodels
 
 &nbsp;  
 
