@@ -14,19 +14,18 @@ To assist users with implementing the method, we have prepared a series of tutor
 (As a note, this tutorial serves as a high-level guide to running Tractor, and it’s the users' responsibility to make sure phasing and local ancestry inference are reliable before running the method, as these will affect results.)
 
 
+This is a shorter and faster version of Elizabeth's Atkinson Tutorial please check here for full pipeline: 
+https://github.com/Atkinson-Lab/Tractor-tutorial/tree/main 
+
 &nbsp;  
 &nbsp;  
 
-## Tractor pipeline step-by-step tutorials:
+## Short Tractor pipeline step-by-step tutorials:
 
 
 Step0. [Phasing and Local Ancestry Inference](Rfmix.md)
 
-Step1. [Recovering Tracts](Recover.md)
+Step1. [Extracting tracts and ancestry dosages](Extract.md)
 
-Step2. [Extracting tracts and ancestry dosages](Extract.md)
-
-Step3a. [Tractor GWAS with Hail (suitable for large scale analysis)](Hail.md)
-
-Step3b. [Tractor GWAS with local implementation (suitable for smaller dataset)](Local.md)
+Step2. [Tractor GWAS with local implementation (suitable for smaller dataset)](Local.md)
 
