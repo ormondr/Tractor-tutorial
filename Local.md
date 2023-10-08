@@ -66,7 +66,7 @@ The tsv file should have at least 2 columns, with the first column indicates sam
 To perform linear regression on a (simulated) continuous phenotype in our admixed cohort, simply type the following command in your terminal:
 
 ```
-# this is for enillius only
+# this is for snellius only
 module load 2022
 module load Python/3.10.4-GCCcore-11.3.0
 module load SciPy-bundle/2022.05-intel-2022a #this has numpy 1.22.3 and pandas 1.4.2
