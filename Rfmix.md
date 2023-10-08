@@ -15,10 +15,16 @@ Before running the Tractor GWAS method, data will need to be phased and have the
 &nbsp; 
 
 ### Data
-We have provided an [example dataset](https://github.com/Atkinson-Lab/Tractor-tutorial/blob/main/tutorial-data.zip) that you may analyze to follow along with this tutorial. Please download and upzip the data from here if so (**hit the download button, git clone is not going to work**).
+We have provided an [example dataset](https://github.com/Atkinson-Lab/Tractor-tutorial/blob/main/tutorial-data.zip) that you may analyze to follow along with this tutorial. Please copy it from other location:
 
 ```
-gunzip tutorial-data.zip
+#gunzip tutorial-data.zip
+
+# login in snellius
+cp -R /projects/0/pgsr0673/tractor/ ./
+
+# start an interactive job in snellius
+srun -n 1 -t 1:00:00 --pty /bin/bash
 ```
 
 The example cohort dataset we are going to use here consists of chromosome 22 for 61 African American individuals from the [Thousand Genome Project](https://www.internationalgenome.org/). These individuals are two-way admixed with components from continental Europe (EUR) and continental Africa (AFR). We simulated phenotypes for these individuals for use in the GWAS.
@@ -98,8 +104,8 @@ Although many software has been developed for statistical phasing, here we will 
 
 The goal of this step is to find the common variants of the haplotype reference panel and our admixed population. Running the following script, Shapeit will typically produce two files `alignments.strand`, `alignments.strand.exclude`, which tell us the variants we should exclude in the downstream analysis. However, the dataset I am using here doesn’t have any variant conflicts, and therefore we can ignore this potential issue for now.
 
-```       
-shapeit -check \
+```    
+#shapeit -check \
         --input-vcf ADMIX_COHORT/ASW.unphased.vcf.gz \
         --input-map HAP_REF/chr22.genetic.map.txt \
         --input-ref HAP_REF/chr22.hap.gz HAP_REF/chr22.legend.gz HAP_REF/ALL.sample \
@@ -130,11 +136,9 @@ We will perform the actual phasing in this step. Notice we should pass argument 
 After running this command, you should find that two file (`ASW.phased.haps` & `ASW.phased.sample`) have been created in the `ADMIX_COHORT` output directory.
 
 
-```       
-shapeit  --input-vcf ADMIX_COHORT/ASW.unphased.vcf.gz \
-      --input-map HAP_REF/chr22.genetic.map.txt \
-      --input-ref HAP_REF/chr22.hap.gz HAP_REF/chr22.legend.gz HAP_REF/ALL.sample \
-      -O ADMIX_COHORT/ASW.phased --thread 8
+```
+
+~/tractor/shapeit.v2.904.3.10.0-693.11.6.el7.x86_64/bin/shapeit  --input-vcf ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.unphased.vcf.gz --input-map ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.genetic.map.txt --input-ref ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.hap.gz ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.legend.gz ~/tractor/tutorial-data/tutorial-data/HAP_REF/ALL.sample -O ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased --thread 16
       
       
       # add this if shapeit throw error message:   --exclude-snp alignments.snp.strand.exclude
@@ -149,12 +153,11 @@ shapeit  --input-vcf ADMIX_COHORT/ASW.unphased.vcf.gz \
 Shapeit provides a convenient function to convert from its `haps`/`sample` file format to `vcf` format. Notice in the new vcf file we just created, slashes have changed to the pipe or vertical bar to seperate genotype. Additionally, we can zip the vcf file to save disc space.
 
 ```       
-shapeit -convert \
-        --input-haps ADMIX_COHORT/ASW.phased\
-        --output-vcf ADMIX_COHORT/ASW.phased.vcf
-        
+~/tractor/shapeit.v2.904.3.10.0-693.11.6.el7.x86_64/bin/shapeit -convert \
+        --input-haps ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased\
+        --output-vcf ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased.vcf
 
-bgzip -c ADMIX_COHORT/ASW.phased.vcf > ADMIX_COHORT/ASW.phased.vcf.gz
+# you may bgzip with larger files
 ```   
 
 --- 
@@ -192,11 +195,11 @@ Here we use [Rfmix](https://github.com/slowkoni/rfmix/blob/master/MANUAL.md) to 
 
 
 ```
-rfmix -f ADMIX_COHORT/ASW.phased.vcf.gz \
-        -r AFR_EUR_REF/YRI_GBR.phased.vcf.gz \
-        -m AFR_EUR_REF/YRI_GBR.tsv \
-        -g AFR_EUR_REF/chr22.genetic.map.modified.txt \
-        -o ADMIX_COHORT/ASW.deconvoluted \
+~/tractor/rfmix/rfmix -f ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased.vcf \
+        -r ~/tractor/tutorial-data/tutorial-data/AFR_EUR_REF/YRI_GBR.phased.vcf.gz \
+        -m ~/tractor/tutorial-data/tutorial-data/AFR_EUR_REF/YRI_GBR.tsv \
+        -g ~/tractor/tutorial-data/tutorial-data/AFR_EUR_REF/chr22.genetic.map.modified.txt \
+        -o ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.deconvoluted \
         --chromosome=22
 ```
 
