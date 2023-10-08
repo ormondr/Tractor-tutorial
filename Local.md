@@ -66,6 +66,17 @@ The tsv file should have at least 2 columns, with the first column indicates sam
 To perform linear regression on a (simulated) continuous phenotype in our admixed cohort, simply type the following command in your terminal:
 
 ```
+# this is for enillius only
+module load 2022
+module load Python/3.10.4-GCCcore-11.3.0
+module load SciPy-bundle/2022.05-intel-2022a #this has numpy 1.22.3 and pandas 1.4.2
+#statsmodels needs to be installed
+python -m venv venv
+source venv/bin/activate
+pip install statsmodels
+
+#
+
 python3 ~/tractor/Tractor/RunTractor.py --hapdose ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased --phe ~/tractor/tutorial-data/tutorial-data/PHENO/Phe.txt --method linear --out SumStats.tsv
 ```
 
@@ -91,14 +102,28 @@ Gpval_anc1:         p value for alternate alleles that are interited from anc1 (
 To visualize Tractor GWAS results, we may use the R package [qqman](https://cran.r-project.org/web/packages/qqman/vignettes/qqman.html) to draw a manhattan plot of our sumstats, and indeed we see a top hit in the AFR with some LD friends. Note in particular that we have a hit in only the AFR ancestry background in this example, no signal is observed in the EUR plot. We recommend plotting QQ plots with the lambda GC values shown in addition to your Manhattan plots to ensure your GWAS was well controlled.
 
 ```
+# load R module to snellius
+module load R/4.2.1-foss-2022a
+
+#enter R
+R
+
+...
 library(qqman)
 sumstats = read.csv("SumStats.tsv", sep = "\t")
 
 par(mfrow=c(1,2))
+
+pdf("./Botucatu.pdf")
 manhattan(sumstats[!is.na(sumstats$Gpval_anc0),], chr="CHROM", bp="POS", snp="ID", p="Gpval_anc0",
           xlim = c(min(sumstats$POS), max(sumstats$POS)), ylim = c(0,15), main = "AFR")
 manhattan(sumstats[!is.na(sumstats$Gpval_anc1),], chr="CHROM", bp="POS", snp="ID", p="Gpval_anc1",
           xlim = c(min(sumstats$POS), max(sumstats$POS)), ylim = c(0,15), main = "EUR")
+dev.off()
+
+
+
+
 ```
 
 ![](images/Manhattan.png)
