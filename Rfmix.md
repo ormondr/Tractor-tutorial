@@ -138,7 +138,11 @@ After running this command, you should find that two file (`ASW.phased.haps` & `
 
 ```
 
-~/tractor/shapeit.v2.904.3.10.0-693.11.6.el7.x86_64/bin/shapeit  --input-vcf ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.unphased.vcf.gz --input-map ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.genetic.map.txt --input-ref ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.hap.gz ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.legend.gz ~/tractor/tutorial-data/tutorial-data/HAP_REF/ALL.sample -O ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased --thread 16
+~/tractor/shapeit.v2.904.3.10.0-693.11.6.el7.x86_64/bin/shapeit  \
+        --input-vcf ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.unphased.vcf.gz \
+        --input-map ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.genetic.map.txt \
+        --input-ref ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.hap.gz ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.legend.gz ~/tractor/tutorial-data/tutorial-data/HAP_REF/ALL.sample \
+        -O ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased --thread 16
       
       
       # add this if shapeit throw error message:   --exclude-snp alignments.snp.strand.exclude
