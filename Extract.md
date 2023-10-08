@@ -17,7 +17,9 @@ Compared to the standard GWAS model, Tractor takes local ancestry into account a
 
 Tractor scripts can be easily installed with:
 ```
-git clone https://github.com/Atkinson-Lab/Tractor.git
+#git clone https://github.com/Atkinson-Lab/Tractor.git
+#these scrits are in ~/tractor/Tractor/ folder
+
 ```
 
 &nbsp;  
@@ -54,10 +56,9 @@ The `ASW.deconvoluted.msp.tsv` file, which contains the most likely ancestral as
 
 We provide a script that can simultaneously extract risk allele information and local ancestry information. Simply type the following command in terminal:
 ```
-python Tractor/ExtractTracts.py \
-      --msp ADMIX_COHORT/ASW.deconvoluted \
-      --vcf ADMIX_COHORT/ASW.phased \
-      --zipped \
+python3 ~/tractor/Tractor/ExtractTracts.py \
+      --msp ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.deconvoluted \
+      --vcf ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased \
       --num-ancs 2
 ```
 Note that we used the --zipped flag because the files we are using in this tutorial at zipped. If your data has not been zipped, omit this flag.
@@ -130,7 +131,5 @@ Now we are ready to run Tractor GWAS! We have recently developed python scripts 
 
 
 ## [Main Page](README.md)
-
-## [Next Page (Option1: Hail Tractor)](Hail.md) 
 
 ## [Next Page (Option2: Local Tractor)](Local.md)  
