@@ -57,7 +57,7 @@ We provide a script that can simultaneously extract risk allele information and 
 ```
 
 python3 /home/PGC-TDP/Tractor/scripts/extract_tracts.py \
---msp ./treino_tractor/ASW.deconvoluted \
+--msp ./treino_tractor/ASW.deconvoluted.msp.tsv \
 --vcf ./treino_tractor/ASW.phased.vcf \
 --num-ancs 2
 ```
