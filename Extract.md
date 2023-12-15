@@ -24,7 +24,7 @@ Tractor scripts can be easily installed with:
 &nbsp;  
 &nbsp;  
 
-#### Check files in `ADMIX_COHORT` directory
+#### Check files in `treino_tractor` directory
 
 We have demonstrated how to perform phasing and local ancestry inference, respectively, on the first page of this tutorial. To recap, after running phasing with Shapeit2, we should have 
 ```
