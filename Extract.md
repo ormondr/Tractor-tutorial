@@ -18,7 +18,7 @@ Compared to the standard GWAS model, Tractor takes local ancestry into account a
 
 Tractor scripts can be easily installed with:
 ```
-git clone https://github.com/Atkinson-Lab/Tractor.git
+##git clone https://github.com/Atkinson-Lab/Tractor.git
 ```
 
 &nbsp;  
