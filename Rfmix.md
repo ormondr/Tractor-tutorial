@@ -140,7 +140,7 @@ After running this command, you should find that two file (`ASW.phased.haps` & `
 --input-ref /home/PGC-TDP/tractor_tutorial_data/HAP_REF/chr22.hap.gz \
 /home/PGC-TDP/tractor_tutorial_data/HAP_REF/chr22.legend.gz \
 /home/PGC-TDP/tractor_tutorial_data/HAP_REF/ALL.sample \
--O ./treino_tractor/ASW.phased --burn 3 --prune 3 --main 3 thread 15
+-O ./treino_tractor/ASW.phased --burn 3 --prune 3 --main 3 --thread 15
       
       
       # add this if shapeit throw error message:   --exclude-snp alignments.snp.strand.exclude
