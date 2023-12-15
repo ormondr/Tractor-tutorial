@@ -18,13 +18,11 @@ Before running the Tractor GWAS method, data will need to be phased and have the
 We have provided an [example dataset](https://github.com/Atkinson-Lab/Tractor-tutorial/blob/main/tutorial-data.zip) that you may analyze to follow along with this tutorial. Please copy it from other location:
 
 ```
-#gunzip tutorial-data.zip
+# login in unifesp cluster
+ssh (user)@gwashub.unifesp.br
 
-# login in snellius
-cp -R /projects/0/pgsr0673/tractor/ ./
-
-# start an interactive job in snellius
-srun -n 1 -t 1:00:00 --pty /bin/bash
+# make directory for outputs
+mkdir treino_tractor
 ```
 
 The example cohort dataset we are going to use here consists of chromosome 22 for 61 African American individuals from the [Thousand Genome Project](https://www.internationalgenome.org/). These individuals are two-way admixed with components from continental Europe (EUR) and continental Africa (AFR). We simulated phenotypes for these individuals for use in the GWAS.
@@ -60,11 +58,11 @@ data
 
 ### Software 
 
-[Shapeit2: v2.r837](https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.html)  
+[Shapeit2: v2.r837] 
 
-[Rfmix version 2](https://github.com/slowkoni/rfmix/blob/master/MANUAL.md)  
+[Rfmix version 2] 
 
-[Tractor (requires the following packages: numpy, statsmodel, pandas)](https://github.com/Atkinson-Lab/Tractor)
+[Tractor (requires the following packages: numpy, statsmodel, pandas)]
 
 
 &nbsp;  
@@ -79,8 +77,6 @@ data
 &nbsp;  
  
 Cohort genotype data is often released in [VCF format](https://www.internationalgenome.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-40/), which is the form we start from here. Though the human genome is diploid, sequencing/genotyping technology can only capture information regarding the genotypes that are present but not their orientation; e.g. the haplotype. We therefore don't know which allele is on which strand of the chromosome. The purpose of statistical phasing is to recover the configuration of alleles across a chromosome, as the diagram shows:
-
-![](images/SHAPEIT.png)
 
 
 Notice that each entry is separated with slash (e.g. `0/1`), and that means the VCF file is unphased. By performing phasing, we will figure out the most likely configuration of allele positions. After performing the following steps, we should get a phased VCF file, with the slash substituted by a vertical bar (e.g. `1|0`) which indicates that the data is phased.
@@ -102,7 +98,7 @@ Although many software has been developed for statistical phasing, here we will 
 
 #### B. Aligning common variants between query vcf and reference panel
 
-The goal of this step is to find the common variants of the haplotype reference panel and our admixed population. Running the following script, Shapeit will typically produce two files `alignments.strand`, `alignments.strand.exclude`, which tell us the variants we should exclude in the downstream analysis. However, the dataset I am using here doesn’t have any variant conflicts, and therefore we can ignore this potential issue for now.
+The goal of this step is to find the common variants of the haplotype reference panel and our admixed population. Running the following script, Shapeit will typically produce two files `alignments.strand`, `alignments.strand.exclude`, which tell us the variants we should exclude in the downstream analysis. However, the dataset I am using here doesn’t have any variant conflicts, and therefore we can ignore this potential issue for now. (NOT NECESSARY NOW)
 
 ```    
 #shapeit -check \
@@ -138,11 +134,13 @@ After running this command, you should find that two file (`ASW.phased.haps` & `
 
 ```
 
-~/tractor/shapeit.v2.904.3.10.0-693.11.6.el7.x86_64/bin/shapeit  \
-        --input-vcf ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.unphased.vcf.gz \
-        --input-map ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.genetic.map.txt \
-        --input-ref ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.hap.gz ~/tractor/tutorial-data/tutorial-data/HAP_REF/chr22.legend.gz ~/tractor/tutorial-data/tutorial-data/HAP_REF/ALL.sample \
-        -O ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased --thread 16
+/home/PGC-TDP/shapeit_v2/bin/shapeit \
+--input-vcf /home/PGC-TDP/tractor_tutorial_data/ADMIX_COHORT/ASW.unphased.vcf.gz \
+--input-map /home/PGC-TDP/tractor_tutorial_data/HAP_REF/chr22.genetic.map.txt \
+--input-ref /home/PGC-TDP/tractor_tutorial_data/HAP_REF/chr22.hap.gz \
+/home/PGC-TDP/tractor_tutorial_data/HAP_REF/chr22.legend.gz \
+/home/PGC-TDP/tractor_tutorial_data/HAP_REF/ALL.sample \
+-O ./treino_tractor/ASW.phased --burn 3 --prune 3 --main 3 thread 15
       
       
       # add this if shapeit throw error message:   --exclude-snp alignments.snp.strand.exclude
@@ -156,10 +154,11 @@ After running this command, you should find that two file (`ASW.phased.haps` & `
 
 Shapeit provides a convenient function to convert from its `haps`/`sample` file format to `vcf` format. Notice in the new vcf file we just created, slashes have changed to the pipe or vertical bar to seperate genotype. Additionally, we can zip the vcf file to save disc space.
 
-```       
-~/tractor/shapeit.v2.904.3.10.0-693.11.6.el7.x86_64/bin/shapeit -convert \
-        --input-haps ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased\
-        --output-vcf ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased.vcf
+```
+/home/PGC-TDP/shapeit_v2/bin/shapeit -convert \
+--input-haps ./treino_tractor/ASW.phased \
+--output-vcf ./treino_tractor/ASW.phased.vcf
+
 
 # you may bgzip with larger files
 ```   
@@ -183,14 +182,11 @@ To run local ancestry inference, we need a homogeneous phased reference panel co
 
 For example, the 1st generation of the two-way admixed AFR-EUR population illustrated here inherited one full copy of chromosomes from EUR ancestry, and one from AFR ancestry. However, for more recent generations of this admixed population, the chromosomes will have been broken down into smaller ancestral pieces due to crossover events in meiosis.
 
-![](images/localancestry.png)
 
 &nbsp;  
 &nbsp;  
 
 The goal of running local ancestry inference is to "paint" the chromosomes based on the ancestry origin of each piece of the genome in each individual. In the downstream analysis of this Tractor pipeline, we will use local ancestry information to help us better understand the genotype-phenotype association.
-
-![](images/inference.png)
 
 &nbsp;  
 &nbsp;  
@@ -199,12 +195,12 @@ Here we use [Rfmix](https://github.com/slowkoni/rfmix/blob/master/MANUAL.md) to 
 
 
 ```
-~/tractor/rfmix/rfmix -f ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased.vcf \
-        -r ~/tractor/tutorial-data/tutorial-data/AFR_EUR_REF/YRI_GBR.phased.vcf.gz \
-        -m ~/tractor/tutorial-data/tutorial-data/AFR_EUR_REF/YRI_GBR.tsv \
-        -g ~/tractor/tutorial-data/tutorial-data/AFR_EUR_REF/chr22.genetic.map.modified.txt \
-        -o ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.deconvoluted \
-        --chromosome=22
+/home/PGC-TDP/rfmix/rfmix -f ./treino_tractor/ASW.phased.vcf \
+-r /home/PGC-TDP/tractor_tutorial_data/AFR_EUR_REF/YRI_GBR.phased.vcf.gz \
+-m /home/PGC-TDP/tractor_tutorial_data/AFR_EUR_REF/YRI_GBR.tsv \
+-g /home/PGC-TDP/tractor_tutorial_data/AFR_EUR_REF/chr22.genetic.map.modified.txt \
+-o ./treino_tractor/ASW.deconvoluted \
+--chromosome=22
 ```
 
 
@@ -220,5 +216,5 @@ Now you have your local ancestry calls and are ready for Tractor! We will demons
 
 ## [Main Page](README.md)
 
-## [Next Page (Extract tracts)](Local.md)
+## [Next Page (Run Tractor)](Local.md)
 
