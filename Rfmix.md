@@ -76,10 +76,10 @@ data
 &nbsp;  
 &nbsp;  
  
-Cohort genotype data is often released in [VCF format](https://www.internationalgenome.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-40/), which is the form we start from here. Though the human genome is diploid, sequencing/genotyping technology can only capture information regarding the genotypes that are present but not their orientation; e.g. the haplotype. We therefore don't know which allele is on which strand of the chromosome. The purpose of statistical phasing is to recover the configuration of alleles across a chromosome, as the diagram shows:
+Cohort genotype data is often released in [VCF format](https://www.internationalgenome.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-40/), which is the form we start from here. Though the human genome is diploid, sequencing/genotyping technology can only capture information regarding the genotypes that are present but not their orientation; e.g. the haplotype. We therefore don't know which allele is on which strand of the chromosome.
 
 
-Notice that each entry is separated with slash (e.g. `0/1`), and that means the VCF file is unphased. By performing phasing, we will figure out the most likely configuration of allele positions. After performing the following steps, we should get a phased VCF file, with the slash substituted by a vertical bar (e.g. `1|0`) which indicates that the data is phased.
+
 
 
 &nbsp;  
@@ -87,7 +87,7 @@ Notice that each entry is separated with slash (e.g. `0/1`), and that means the 
 &nbsp;  
  
 
-Although many software has been developed for statistical phasing, here we will use [shapeit](https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.html#output) to perform phasing based on a reference haplotype panel. According to the manual [here](https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.html#reference), the phasing procedure consists of the following 4 steps:
+Although many software has been developed for statistical phasing, here we will use [shapeit](https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.html#output) to perform phasing based on a reference haplotype panel. According to the manual [here](https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.html#reference).
 
 &nbsp;  
 
@@ -180,7 +180,6 @@ Shapeit provides a convenient function to convert from its `haps`/`sample` file 
 
 To run local ancestry inference, we need a homogeneous phased reference panel composed of the relevant ancestries, and a phased admixed cohort vcf file. Admixed populations have chromosomes with a mosaic of ancestral tracts, as different chromosomal pieces will have been inherited from multiple ancestries. The length of these tracts is related to the demographic history of the population, with the average tract length being inversely proportional to the number of generations ago that the pulse of admixture occurred. This is because recombination will break down tracts over time.
 
-For example, the 1st generation of the two-way admixed AFR-EUR population illustrated here inherited one full copy of chromosomes from EUR ancestry, and one from AFR ancestry. However, for more recent generations of this admixed population, the chromosomes will have been broken down into smaller ancestral pieces due to crossover events in meiosis.
 
 
 &nbsp;  
