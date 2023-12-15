@@ -24,7 +24,6 @@ In admixture mapping, we assume local ancestries affect the phenotype but don't 
 Tractor takes both local ancestry and risk alleles into account and can be viewed as a combined method of GWAS and admixture mapping. In the Tractor model, we have 3 explanatory variables: X1 represents the number of `AFR` local ancestry haplotypes at a variant (identical to the X term used in admixture mapping); X2 represents the number of risk alleles on an AFR background - `AFR-Risk`, X3 represents the number of risk alleles on an EUR background `EUR-Risk`. In this way, we can get ancestry-specific summary statistics as output. In other words, we will observe if risk alleles on an `AFR` background may affect the phenotype differently compared with risk alleles on `EUR`. Such a case of differing marginal effect sizes at GWAS SNPs occur due to different tagging of causal variants depending on the ancestry; LD blocks, polymorphic loci, and allele frequencies differ across ancestries due to different populations' demographic histories.
 
 
-![Methods comparison](images/TractorModel.png)
 
 
 &nbsp;  
@@ -77,7 +76,7 @@ pip install statsmodels
 
 #
 
-python3 ~/tractor/Tractor/RunTractor.py --hapdose ~/tractor/tutorial-data/tutorial-data/ADMIX_COHORT/ASW.phased --phe ~/tractor/tutorial-data/tutorial-data/PHENO/Phe.txt --method linear --out SumStats.tsv
+python3 /home/PGC-TDP/Tractor/scripts/RunTractor.py --hapdose ./treino_tractor/ASW.phased --phe /home/PGC-TDP/tutorial_data_tractor/PHENO/Phe.txt --method linear --out ./treino_tractor/SumStats.tsv
 ```
 
 This generates our summary statistic output, which has the estimated ancestry-specific p value and effect sizes for each locus for each ancestry. More specifically, you shall see these columns in the summary statistics:
